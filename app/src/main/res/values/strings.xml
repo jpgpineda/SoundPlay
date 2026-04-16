@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">SoundPlay</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mail">Correo:</string>
+    <string name="password">Contraseña:</string>
+    <string name="restorePassword">Olvide mi contraseña</string>
+    <string name="signIn">Ingresar</string>
+    <string name="register">¿No tienes cuenta? Registrate</string>
+    <string name="backToSignIn">¿Ya tienes cuenta? Inicia sesión</string>
 </resources>

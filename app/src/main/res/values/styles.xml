@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainButton" parent="Widget.Material3.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">12dp</item>
+
+        <!-- COLOR FONDO -->
+        <item name="backgroundTint">@color/button_background</item>
+
+        <!-- COLOR TEXTO -->
+        <item name="android:textColor">@color/button_text</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainText" parent="TextAppearance.Material3.BodyLarge">
+
+        <!-- Color del texto -->
+        <item name="android:textColor">#FFFFFF</item>
+
+        <!-- Negrita -->
+        <item name="android:textStyle">bold</item>
+
+        <!-- Tamaño opcional -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAlignment">center</item>
+
+    </style>
+
+    <style name="MainTextInput" parent="Widget.Material3.TextInputLayout.FilledBox">
+
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">#FFFFFF</item>
+
+        <!-- Color del hint -->
+        <item name="hintTextColor">#000000</item>
+
+    </style>
+
+    <style name="MainEditText" parent="Widget.Material3.TextInputEditText.FilledBox">
+
+        <!-- Color del texto -->
+        <item name="android:textColor">#000000</item>
+
+        <!-- Color del hint dentro del input -->
+        <item name="android:textColorHint">#000000</item>
+
+    </style>
+</resources>
