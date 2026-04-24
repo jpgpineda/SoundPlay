@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/MainTextInput"
+        style="@style/passwordTil"
         android:id="@+id/emailTil"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <com.google.android.material.textfield.TextInputEditText
-            style="@style/MainEditText"
+            style="@style/passwordTiet"
             android:id="@+id/emailTiet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        style="@style/MainTextInput"
+        style="@style/passwordTil"
         android:id="@+id/passwordTil"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailTil">
 
         <com.google.android.material.textfield.TextInputEditText
-            style="@style/MainEditText"
+            style="@style/passwordTiet"
             android:id="@+id/passwordTiet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        style="@style/MainText"
+        style="@style/signInLabel"
         android:id="@+id/restorePasswordText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordTil" />
 
     <TextView
-        style="@style/MainText"
+        style="@style/signInLabel"
         android:id="@+id/registerText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/MainButton"
+        style="@style/signUpButton"
         android:id="@+id/signInButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

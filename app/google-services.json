@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "562794844867",
+    "project_id": "soundplay-93bae",
+    "storage_bucket": "soundplay-93bae.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:562794844867:android:b03d15fd4f2cb8f33fc876",
+        "android_client_info": {
+          "package_name": "com.example.soundplay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg5zRr12Rq5nv3v-AuUI2Eu2srxpQqrx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
