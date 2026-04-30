@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/mainBackground"
-    tools:context=".RegisterFragment">
+    tools:context=".signup.RegisterFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -67,6 +67,30 @@
             app:layout_constraintStart_toStartOf="parent"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/passwordTil"
+        android:id="@+id/confirmPasswordTil"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/password"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTil">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/passwordTiet"
+            android:id="@+id/confirmPasswordTiet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         style="@style/signInLabel"
         android:id="@+id/registerText"
@@ -81,8 +105,8 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
-        style="@style/signUpButton"
         android:id="@+id/signInButton"
+        style="@style/signUpButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -90,7 +114,8 @@
         android:layout_marginEnd="16dp"
         android:text="@string/signIn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTil" />
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTil" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
