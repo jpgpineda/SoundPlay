@@ -23,6 +23,6 @@ object ApiClient {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(SongApi::class.java)
+            .create(SongAPI::class.java)
     }
 }
