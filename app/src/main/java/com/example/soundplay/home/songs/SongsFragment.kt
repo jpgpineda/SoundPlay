@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soundplay.R
 import com.example.soundplay.core.FragmentCommunicator
 import com.example.soundplay.core.ResponseService
@@ -25,6 +26,9 @@ class SongsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<SongsViewModel>()
     private lateinit var communicator: FragmentCommunicator
+    private val adapter = SongsAdapter { song ->
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +37,8 @@ class SongsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSongsBinding.inflate(inflater, container, false)
         communicator = requireActivity() as FragmentCommunicator
+        binding.rvSongs.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvSongs.adapter = adapter
         observeState()
         viewModel.loadTracks()
         return binding.root
@@ -48,7 +54,7 @@ class SongsFragment : Fragment() {
                         }
                         is ResponseService.Success -> {
                             communicator.manageLoader(false)
-                            Log.i("Songs", "Songs List: ${state.data}")
+                            adapter.submitList(state.data)
                         }
                         is ResponseService.Error -> {
                             communicator.manageLoader(false)
