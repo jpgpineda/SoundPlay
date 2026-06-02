@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soundplay.R
 import com.example.soundplay.core.FragmentCommunicator
@@ -27,7 +28,8 @@ class SongsFragment : Fragment() {
     private val viewModel by viewModels<SongsViewModel>()
     private lateinit var communicator: FragmentCommunicator
     private val adapter = SongsAdapter { song ->
-
+        val bundle = Bundle().apply { putParcelable("song", song) }
+        findNavController().navigate(R.id.action_songsFragment_to_songDetailFragment, bundle)
     }
 
     override fun onCreateView(
