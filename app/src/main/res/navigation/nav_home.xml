@@ -23,15 +23,15 @@
         android:id="@+id/playListsFragment"
         android:name="com.example.soundplay.home.playLists.PlayListsFragment"
         android:label="fragment_play_lists"
-        tools:layout="@layout/fragment_play_lists" />
+        tools:layout="@layout/fragment_play_lists" >
+        <action
+            android:id="@+id/action_playListsFragment_to_songDetailFragment"
+            app:destination="@id/songDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/songDetailFragment"
         android:name="com.example.soundplay.home.songDetail.SongDetailFragment"
         android:label="fragment_song_detail"
-        tools:layout="@layout/fragment_song_detail">
-        <argument
-            android:name="song"
-            app:argType="com.example.soundplay.core.model.Song" />
-    </fragment>
+        tools:layout="@layout/fragment_song_detail" />
 
 </navigation>

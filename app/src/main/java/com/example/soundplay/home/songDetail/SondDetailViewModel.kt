@@ -3,7 +3,10 @@ package com.example.soundplay.home.songDetail
 import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.soundplay.core.ResponseService
 import com.example.soundplay.core.model.Song
+import com.example.soundplay.core.repositories.FavoritesRepository
+import com.example.soundplay.core.repositories.FavoritesService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +14,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class SondDetailViewModel: ViewModel() {
+class SondDetailViewModel(
+    private val favoritesService: FavoritesService = FavoritesRepository()
+): ViewModel() {
     private var mediaPlayer: MediaPlayer? = null
     private var progressJob: Job? = null
 
@@ -26,6 +31,12 @@ class SondDetailViewModel: ViewModel() {
 
     private val _isReady = MutableStateFlow(false)
     val isReady: StateFlow<Boolean> = _isReady.asStateFlow()
+
+    private val _isFavorite = MutableStateFlow(false)
+    val isFavorite: StateFlow<Boolean> = _isFavorite.asStateFlow()
+
+    private val _favoriteError = MutableStateFlow<String?>(null)
+    val favoriteError: StateFlow<String?> = _favoriteError.asStateFlow()
 
     fun prepare(song: Song) {
         // Si ya estaba preparado para esta canción, no hacer nada
@@ -72,6 +83,35 @@ class SondDetailViewModel: ViewModel() {
                 delay(500)
             }
         }
+    }
+
+    fun checkFavorite(songId: String) {
+        viewModelScope.launch {
+            when (val result = favoritesService.isFavorite(songId)) {
+                is ResponseService.Success -> _isFavorite.value = result.data
+                is ResponseService.Error -> _favoriteError.value = result.error
+                else -> Unit
+            }
+        }
+    }
+
+    fun toggleFavorite(song: Song) {
+        viewModelScope.launch {
+            val result = if (_isFavorite.value) {
+                favoritesService.removeFavorite(song.id)
+            } else {
+                favoritesService.addFavorite(song)
+            }
+            when (result) {
+                is ResponseService.Success -> _isFavorite.value = !_isFavorite.value
+                is ResponseService.Error -> _favoriteError.value = result.error
+                else -> Unit
+            }
+        }
+    }
+
+    fun consumeFavoriteError() {
+        _favoriteError.value = null
     }
 
     override fun onCleared() {

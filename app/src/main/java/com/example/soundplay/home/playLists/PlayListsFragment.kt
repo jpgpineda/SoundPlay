@@ -1,60 +1,87 @@
 package com.example.soundplay.home.playLists
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soundplay.R
+import com.example.soundplay.core.FragmentCommunicator
+import com.example.soundplay.core.ResponseService
+import com.example.soundplay.databinding.FragmentPlayListsBinding
+import com.example.soundplay.home.songs.SongsAdapter
+import com.example.soundplay.home.songs.SongsSharedViewModel
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [PlayListsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class PlayListsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private var _binding: FragmentPlayListsBinding? = null
+    private val binding get() = _binding!!
+
+    private val viewModel by viewModels<PlayListsViewModel>()
+    private val sharedViewModel by activityViewModels<SongsSharedViewModel>()
+    private lateinit var communicator: FragmentCommunicator
+
+    private val adapter = SongsAdapter { song ->
+        sharedViewModel.selectSong(song)
+        findNavController().navigate(R.id.action_playListsFragment_to_songDetailFragment)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_play_lists, container, false)
+    ): View {
+        _binding = FragmentPlayListsBinding.inflate(inflater, container, false)
+        communicator = requireActivity() as FragmentCommunicator
+        binding.rvFavorites.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvFavorites.adapter = adapter
+        observeState()
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlayListsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlayListsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onResume() {
+        super.onResume()
+        // Refresca la lista cada vez que el usuario vuelve a esta pantalla,
+        // por si agregó o quitó favoritos desde el detalle.
+        viewModel.loadFavorites()
+    }
+
+    private fun observeState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.favoritesState.collect { state ->
+                    when (state) {
+                        is ResponseService.Loading -> {
+                            communicator.manageLoader(true)
+                            binding.tvEmpty.visibility = View.GONE
+                        }
+                        is ResponseService.Success -> {
+                            communicator.manageLoader(false)
+                            adapter.submitList(state.data)
+                            binding.tvEmpty.visibility =
+                                if (state.data.isEmpty()) View.VISIBLE else View.GONE
+                        }
+                        is ResponseService.Error -> {
+                            communicator.manageLoader(false)
+                            Snackbar.make(binding.root, state.error, Snackbar.LENGTH_LONG).show()
+                        }
+                        null -> Unit
+                    }
                 }
             }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

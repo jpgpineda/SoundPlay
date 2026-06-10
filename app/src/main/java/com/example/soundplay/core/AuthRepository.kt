@@ -21,7 +21,9 @@ class AuthRepository(): Authentication {
     ): ResponseService<FirebaseUser> = withContext(Dispatchers.IO) {
         try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
-            result.user?.let { ResponseService.Success(it) }
+            result.user?.let {
+                ResponseService.Success(it)
+            }
                 ?: ResponseService.Error("Usuario no encontrado")
         } catch (e: FirebaseAuthInvalidCredentialsException) {
             ResponseService.Error("Correo o contraseña incorrectos")

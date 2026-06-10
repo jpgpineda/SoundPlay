@@ -6,16 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.soundplay.R
 import com.example.soundplay.core.model.Song
 import com.example.soundplay.databinding.FragmentSongDetailBinding
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.soundplay.home.songs.SongsSharedViewModel
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -26,13 +28,8 @@ class SongDetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<SondDetailViewModel>()
+    private val sharedViewModel by activityViewModels<SongsSharedViewModel>()
     private lateinit var song: Song
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        song = requireArguments().getParcelable("song")
-            ?: error("Song argument required")
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,12 +42,13 @@ class SongDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        song = sharedViewModel.selectedSong.value ?: return
         bindSongInfo()
         setupListeners()
         observeViewModel()
 
         viewModel.prepare(song)
+        viewModel.checkFavorite(song.id)
     }
 
     private fun bindSongInfo() {
@@ -70,6 +68,10 @@ class SongDetailFragment : Fragment() {
 
         binding.btnPlayPause.setOnClickListener {
             viewModel.togglePlayPause()
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            viewModel.toggleFavorite(song)
         }
 
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -107,6 +109,24 @@ class SongDetailFragment : Fragment() {
                             if (playing) android.R.drawable.ic_media_pause
                             else android.R.drawable.ic_media_play
                         )
+                    }
+                }
+
+                launch {
+                    viewModel.isFavorite.collect { fav ->
+                        binding.btnFavorite.setImageResource(
+                            if (fav) R.drawable.ic_heart_filled
+                            else R.drawable.ic_heart_outline
+                        )
+                    }
+                }
+
+                launch {
+                    viewModel.favoriteError.collect { msg ->
+                        if (msg != null) {
+                            Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+                            viewModel.consumeFavoriteError()
+                        }
                     }
                 }
             }

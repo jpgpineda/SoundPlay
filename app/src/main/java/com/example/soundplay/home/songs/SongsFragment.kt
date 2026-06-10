@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -26,10 +27,11 @@ class SongsFragment : Fragment() {
     private var _binding: FragmentSongsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<SongsViewModel>()
+    private val sharedViewModel by activityViewModels<SongsSharedViewModel>()
     private lateinit var communicator: FragmentCommunicator
     private val adapter = SongsAdapter { song ->
-        val bundle = Bundle().apply { putParcelable("song", song) }
-        findNavController().navigate(R.id.action_songsFragment_to_songDetailFragment, bundle)
+        sharedViewModel.selectSong(song)
+        findNavController().navigate(R.id.action_songsFragment_to_songDetailFragment)
     }
 
     override fun onCreateView(
