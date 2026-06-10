@@ -7,7 +7,7 @@
     <item
         android:id="@+id/playListsFragment"
         android:icon="@drawable/playlist_ic"
-        android:title="Playlists"/>
+        android:title="Favoritas"/>
     <item
         android:id="@+id/accountFragment"
         android:icon="@drawable/account_ic"
